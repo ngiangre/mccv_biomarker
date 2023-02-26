@@ -1,0 +1,32 @@
+project:
+  type: website
+  render:
+    - "*.qmd"
+    - "*.ipynb"
+  output-dir: docs
+
+execute:
+  cache: false
+  freeze: auto
+
+website:
+  title: "mccv"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: MCCV_example.ipynb
+        text: Example
+      - href: Generating_Datasets_For_MCCV.ipynb
+        text: Biomarker Datasets
+      - href: Running_Biomarker_Predictions_By_MCCV.ipynb
+        text: Biomarker Predictions
+
+format:
+  html:
+    theme: lumen
+    css: styles.css
+    toc: true
+
+
+

@@ -1,0 +1,81 @@
+---
+title: "Clinical machine learning using Monte Carlo Cross Validation (MCCV)"
+author: Nick Giangreco
+format:
+  revealjs:
+    incremental: true
+engine: knitr
+---
+
+## Outline
+
+::: {.incremental}
+1.  Who am I?
+2.  What is Monte Carlo Cross Validation (MCCV)?
+3.  How well does MCCV learn?
+4.  Is MCCV open-source?
+5.  How does MCCV compare to using a t-test?
+:::
+
+## Nick Giangreco developed data mining and prediction methodologies at Columbia University {.smaller}
+
+- PhD in Systems Biology at Columbia University
+- Projects:
+   - Differential expression (RNA-Seq, Proteomics)
+   - Electronic Health Record (EHR) analysis
+   - Data mining 
+   - Biomarker prediction
+   
+## What is MCCV? {.smaller}
+
+Monte Carlo Cross Validation (MCCV) is a predictive algorithm that combines prediction, cross validation, and statistical sampling.
+
+## MCCV was designed for answering predictive questions
+
+::: {.incremental}
+1. Can a biomarker predict an outcome in the future?
+2. Can we teach an ML model to predict a future outcome?
+3. What is the expected future outcome from a biomarker in a heterogeneous population?
+4. At what interval of a biomarker distribution can we predict a future outcome well and not well?
+5. Does a covariate confound prediction by a biomarker?
+:::
+
+## MCCV has been used as a prognostic tool to predict adverse outcomes in the future {.smaller}
+
+
+
+## MCCV has been implemented as a python package {.smaller}
+
+## MCCV determines a quantitative measure of prediction, compared to fold change and p-value cutoffs {.smaller}
+
+## MCCV example
+
+```{python}
+#| echo: true
+#| 
+import pandas as pd
+data = pd.read_csv('data/data.csv',index_col=0) # Feature column name is 'biomarker' and response column  name is 'status'
+
+
+#MCCV procedure
+import mccv
+mccv_obj = mccv.mccv(num_bootstraps=200)
+mccv_obj.set_X( data.loc[:,['biomarker']] )
+mccv_obj.set_Y( data.loc[:,['status']] )
+mccv_obj.run_mccv()
+mccv_obj.run_permuted_mccv()
+
+#Output
+#mccv_obj.mccv_data # 4 element dictionary
+#mccv_obj.mccv_permuted_data # 4 element dictionary
+
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+reticulate::py$mccv_obj$mccv_data$`Patient Predictions` %>% 
+    ggplot(aes(factor(y_true),y_proba))  +
+    geom_boxplot()
+
+```

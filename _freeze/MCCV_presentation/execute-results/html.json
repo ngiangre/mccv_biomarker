@@ -1,0 +1,20 @@
+{
+  "hash": "4f8a0e8b349fcfbed496fb6a101604d5",
+  "result": {
+    "markdown": "---\ntitle: \"Clinical machine learning using Monte Carlo Cross Validation (MCCV)\"\nauthor: Nick Giangreco\nformat:\n  revealjs:\n    incremental: true\nengine: knitr\n---\n\n\n## Outline\n\n::: {.incremental}\n1.  Who am I?\n2.  What is Monte Carlo Cross Validation (MCCV)?\n3.  How well does MCCV learn?\n4.  Is MCCV open-source?\n5.  How does MCCV compare to using a t-test?\n:::\n\n## Nick Giangreco developed data mining and prediction methodologies at Columbia University {.smaller}\n\n- PhD in Systems Biology at Columbia University\n- Projects:\n   - Differential expression (RNA-Seq, Proteomics)\n   - Electronic Health Record (EHR) analysis\n   - Data mining \n   - Biomarker prediction\n   \n## What is MCCV? {.smaller}\n\nMonte Carlo Cross Validation (MCCV) is a predictive algorithm that combines prediction, cross validation, and statistical sampling.\n\n## MCCV was designed for answering predictive questions\n\n::: {.incremental}\n1. Can a biomarker predict an outcome in the future?\n2. Can we teach an ML model to predict a future outcome?\n3. What is the expected future outcome from a biomarker in a heterogeneous population?\n4. At what interval of a biomarker distribution can we predict a future outcome well and not well?\n5. Does a covariate confound prediction by a biomarker?\n:::\n\n## MCCV has been used as a prognostic tool to predict adverse outcomes in the future {.smaller}\n\n\n\n## MCCV has been implemented as a python package {.smaller}\n\n## MCCV determines a quantitative measure of prediction, compared to fold change and p-value cutoffs {.smaller}\n\n## MCCV example\n\n\n::: {.cell}\n\n```{.python .cell-code}\nimport pandas as pd\ndata = pd.read_csv('data/data.csv',index_col=0) # Feature column name is 'biomarker' and response column  name is 'status'\n\n\n#MCCV procedure\nimport mccv\nmccv_obj = mccv.mccv(num_bootstraps=200)\nmccv_obj.set_X( data.loc[:,['biomarker']] )\nmccv_obj.set_Y( data.loc[:,['status']] )\nmccv_obj.run_mccv()\nmccv_obj.run_permuted_mccv()\n\n#Output\n#mccv_obj.mccv_data # 4 element dictionary\n#mccv_obj.mccv_permuted_data # 4 element dictionary\n```\n:::\n\n::: {.cell}\n::: {.cell-output-display}\n![](MCCV_presentation_files/figure-revealjs/unnamed-chunk-2-1.png){width=960}\n:::\n:::\n",
+    "supporting": [
+      "MCCV_presentation_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-after-body": [
+        "\n<script>\n  // htmlwidgets need to know to resize themselves when slides are shown/hidden.\n  // Fire the \"slideenter\" event (handled by htmlwidgets.js) when the current\n  // slide changes (different for each slide format).\n  (function () {\n    // dispatch for htmlwidgets\n    function fireSlideEnter() {\n      const event = window.document.createEvent(\"Event\");\n      event.initEvent(\"slideenter\", true, true);\n      window.document.dispatchEvent(event);\n    }\n\n    function fireSlideChanged(previousSlide, currentSlide) {\n      fireSlideEnter();\n\n      // dispatch for shiny\n      if (window.jQuery) {\n        if (previousSlide) {\n          window.jQuery(previousSlide).trigger(\"hidden\");\n        }\n        if (currentSlide) {\n          window.jQuery(currentSlide).trigger(\"shown\");\n        }\n      }\n    }\n\n    // hookup for slidy\n    if (window.w3c_slidy) {\n      window.w3c_slidy.add_observer(function (slide_num) {\n        // slide_num starts at position 1\n        fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);\n      });\n    }\n\n  })();\n</script>\n\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
